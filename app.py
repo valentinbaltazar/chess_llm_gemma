@@ -10,7 +10,7 @@ import torch
 from typing import Iterator
 # import time
 
-# from chess_board import Game
+from chess_board import Game
 
 
 print(f"Is CUDA available: {torch.cuda.is_available()}")
