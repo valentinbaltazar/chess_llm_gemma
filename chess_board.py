@@ -1,3 +1,10 @@
+# import os
+# os.environ["KERAS_BACKEND"] = "torch"  # "jax", "torch" or "tensorflow"
+
+import keras_nlp
+import keras
+import torch
+
 import chess
 import chess.svg
 import time
