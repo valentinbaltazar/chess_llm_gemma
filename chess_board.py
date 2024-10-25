@@ -44,7 +44,7 @@ class Game:
         elif self.counter < 10:
             self.counter += 1
             print(self.counter)
-            self.call_gemma()
+            return self.call_gemma()
         else:
             print("Gemma quit...")
             return None
