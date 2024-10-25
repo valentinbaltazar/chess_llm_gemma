@@ -75,7 +75,7 @@ class Game:
             return True
         except:
             print(f"Invalid move '{move}'. Use algebraic notation (e.g., 'e4', 'Nf3', 'Bxc4') or ask Gemma for help.")
-            return self.display_board()
+            return False
         
     def reset_board(self):
         self.board = chess.Board()
@@ -85,12 +85,13 @@ class Game:
         return self.display_board()
     
     def generate_moves(self, move):
-        if self.player_moves(move) is True:
+        valid_move = self.player_moves(move)
+        if valid_move:
             yield self.display_board()
             yield self.gemma_moves()
         else:
             print("Try again")
-            # return self.display_board()
+            yield self.display_board()
 
 def main():
     end_game = False # Change this to False
