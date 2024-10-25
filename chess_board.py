@@ -85,7 +85,7 @@ class Game:
         return self.display_board()
     
     def generate_moves(self, move):
-        if self.player_moves(move):
+        if self.player_moves(move) is True:
             yield self.display_board()
             yield self.gemma_moves()
         else:
