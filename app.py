@@ -22,8 +22,9 @@ MAX_NEW_TOKENS = 2048
 DEFAULT_MAX_NEW_TOKENS = 128
 
 # model_id = "hf://google/gemma-2b-keras"
-model_id = "hf://google/gemma-2-2b-it"
+# model_id = "hf://google/gemma-2-2b-it"
 
+model_id = 'kaggle://valentinbaltazar/gemma-chess/keras/gemma_2b_en_chess'
 
 
 model = keras_nlp.models.GemmaCausalLM.from_preset(model_id)
