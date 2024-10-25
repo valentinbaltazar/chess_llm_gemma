@@ -94,7 +94,7 @@ with gr.Blocks(fill_height=True) as demo:
     move_input = gr.Textbox(label="Enter your move in algebraic notation (e.g., e4, Nf3, Bxc4)")
 
     btn = gr.Button("Submit Move")
-    btn.click(play_match.generate_moves, inputs=move_input, outputs=board_image)
+    btn.click(play_match.generate_moves, inputs=[move_input, model], outputs=board_image)
 
     reset_btn = gr.Button("Reset Game")
     reset_btn.click(play_match.reset_board, outputs=board_image)
