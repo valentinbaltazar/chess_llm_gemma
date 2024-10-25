@@ -80,7 +80,7 @@ class Game:
     
     def generate_moves(self, move):
         yield self.player_moves(move)
-        yield self.gemma_moves(model)
+        yield self.gemma_moves()
 
 def main():
     end_game = False # Change this to False
