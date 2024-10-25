@@ -21,7 +21,9 @@ MAX_INPUT_TOKEN_LENGTH = 4096
 MAX_NEW_TOKENS = 2048
 DEFAULT_MAX_NEW_TOKENS = 128
 
-model_id = "hf://google/gemma-2b-keras"
+# model_id = "hf://google/gemma-2b-keras"
+model_id = "hf://google/gemma-2-2b-it"
+
 
 
 model = keras_nlp.models.GemmaCausalLM.from_preset(model_id)
