@@ -9,7 +9,7 @@ class Game:
         self.sequence = []
         self.counter = 0
     
-    def call_gemma(self):
+    def call_gemma(self, model):
         template = "Instruction:\n{instruction}\n\nResponse:\n{response}"
         
 
@@ -17,11 +17,11 @@ class Game:
             instruction=f"Predict the next chess move in the sequence {str(self.sequence)}",
             response="",)
 
-        # output = gemma_lm.generate(prompt, max_length=max_output_len)
+        output = model.generate(prompt, max_length=max_output_len)
        
-        # gemma_move = output.split(' ')[-1].strip("'")
+        gemma_move = output.split(' ')[-1].strip("'")
 
-        gemma_move = 'e5'
+        # gemma_move = 'e5'
 
         if self.make_move(gemma_move):
             print(f'Gemma plays {self.sequence[-1]}! (Current Sequence: {self.sequence} {len(self.sequence)})')
@@ -35,10 +35,10 @@ class Game:
             print("Gemma quit...")
             return None
 
-    def gemma_moves(self):
+    def gemma_moves(self, model):
         print(f"Gemma is thinking...(Current Sequence: {self.sequence} {len(self.sequence)})")
         time.sleep(3)
-        return self.call_gemma()
+        return self.call_gemma(model)
 
     def player_moves(self, move):
         return self.make_move(move)
@@ -68,9 +68,9 @@ class Game:
         # self.board.reset
         return self.display_board()
     
-    def generate_moves(self, move):
+    def generate_moves(self, move, model):
         yield self.player_moves(move)
-        yield self.gemma_moves()
+        yield self.gemma_moves(model)
 
 def main():
     end_game = False # Change this to False
