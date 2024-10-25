@@ -1,1 +1,5 @@
-huggingface_hub==0.25.2
+--extra-index-url https://download.pytorch.org/whl/cu113
+torch
+keras-nlp
+keras>=3
+spaces
