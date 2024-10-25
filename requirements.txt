@@ -3,3 +3,4 @@ torch
 keras-nlp
 keras>=3
 spaces
+chess
