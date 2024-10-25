@@ -16,7 +16,8 @@ class Game:
         self.sequence = []
         self.counter = 0
         self.model_id = 'kaggle://valentinbaltazar/gemma-chess/keras/gemma_2b_en_chess'
-        self.model = keras_nlp.models.GemmaCausalLM.from_preset(self.model_id)
+        self.sampler = keras_nlp.samplers.TopKSampler(k=50, temperature=0.7)
+        self.model = keras_nlp.models.GemmaCausalLM.from_preset(self.model_id).compile(sampler=self.sampler)
         
     
     def call_gemma(self):
