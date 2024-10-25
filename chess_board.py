@@ -18,7 +18,7 @@ class Game:
         self.model_id = 'kaggle://valentinbaltazar/gemma-chess/keras/gemma_2b_en_chess'
         self.sampler = keras_nlp.samplers.TopKSampler(k=50, temperature=0.7)
         self.model = keras_nlp.models.GemmaCausalLM.from_preset(self.model_id)
-        self.compile()
+        self.compile_model()
 
     def compile_model(self):
         self.model.compile(sampler=self.sampler)
