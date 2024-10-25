@@ -75,6 +75,8 @@ class Game:
         
     def reset_board(self):
         self.board = chess.Board()
+        self.sequence = []
+        self.counter = 0
         # self.board.reset
         return self.display_board()
     
