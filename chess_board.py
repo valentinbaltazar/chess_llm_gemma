@@ -72,7 +72,7 @@ class Game:
             self.board.push(update)
             # self.display_board()
             self.sequence.append(move)
-            return self.display_board()
+            return True
         except:
             print(f"Invalid move '{move}'. Use algebraic notation (e.g., 'e4', 'Nf3', 'Bxc4') or ask Gemma for help.")
             return None
@@ -85,8 +85,12 @@ class Game:
         return self.display_board()
     
     def generate_moves(self, move):
-        yield self.player_moves(move)
-        yield self.gemma_moves()
+        if self.display_board():
+            yield self.display_board()
+            yield self.gemma_moves()
+        else:
+            print("Try again")
+            return self.display_board()
 
 def main():
     end_game = False # Change this to False
