@@ -8,8 +8,11 @@ class Game:
         self.board = chess.Board()
         self.sequence = []
         self.counter = 0
+        self.model_id = 'kaggle://valentinbaltazar/gemma-chess/keras/gemma_2b_en_chess'
+        self.model = keras_nlp.models.GemmaCausalLM.from_preset(self.model_id)
+        
     
-    def call_gemma(self, model):
+    def call_gemma(self):
         template = "Instruction:\n{instruction}\n\nResponse:\n{response}"
         
 
@@ -17,7 +20,7 @@ class Game:
             instruction=f"Predict the next chess move in the sequence {str(self.sequence)}",
             response="",)
 
-        output = model.generate(prompt, max_length=max_output_len)
+        output = self.model.generate(prompt, max_length=max_output_len)
        
         gemma_move = output.split(' ')[-1].strip("'")
 
@@ -35,10 +38,10 @@ class Game:
             print("Gemma quit...")
             return None
 
-    def gemma_moves(self, model):
+    def gemma_moves(self):
         print(f"Gemma is thinking...(Current Sequence: {self.sequence} {len(self.sequence)})")
         time.sleep(3)
-        return self.call_gemma(model)
+        return self.call_gemma()
 
     def player_moves(self, move):
         return self.make_move(move)
@@ -68,7 +71,7 @@ class Game:
         # self.board.reset
         return self.display_board()
     
-    def generate_moves(self, move, model):
+    def generate_moves(self, move):
         yield self.player_moves(move)
         yield self.gemma_moves(model)
 
