@@ -75,7 +75,7 @@ class Game:
             return True
         except:
             print(f"Invalid move '{move}'. Use algebraic notation (e.g., 'e4', 'Nf3', 'Bxc4') or ask Gemma for help.")
-            return None
+            # return None
         
     def reset_board(self):
         self.board = chess.Board()
