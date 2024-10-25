@@ -27,7 +27,7 @@ class Game:
             instruction=f"Predict the next chess move in the sequence {str(self.sequence)}",
             response="",)
 
-        output = self.model.generate(prompt, max_length=max_output_len)
+        output = self.model.generate(prompt, max_length=256)
        
         gemma_move = output.split(' ')[-1].strip("'")
 
