@@ -80,6 +80,11 @@ chat_interface = gr.ChatInterface(
     type="messages",
 )
 
+
+def display_text():
+    # Function to display some predefined text
+    return "This is the predefined output text testing."
+    
 with gr.Blocks(fill_height=True) as demo:
     gr.Markdown(DESCRIPTION)
         
@@ -91,10 +96,13 @@ with gr.Blocks(fill_height=True) as demo:
         with gr.Column():
             chat_interface.render()
 
+    text_output = gr.Label(label="Display Text for Logs")
+    
     move_input = gr.Textbox(label="Enter your move in algebraic notation (e.g., e4, Nf3, Bxc4)")
-
     btn = gr.Button("Submit Move")
     btn.click(play_match.generate_moves, inputs=move_input, outputs=board_image)
+    btn.click(display_text, outputs=text_output)
+    
 
     reset_btn = gr.Button("Reset Game")
     reset_btn.click(play_match.reset_board, outputs=board_image)
