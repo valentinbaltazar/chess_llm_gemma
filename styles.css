@@ -1,1 +1,4 @@
-.game_logs_label { font-size: 12px !important}
+#game_logs_label { 
+  font-size: 8px;
+  color: blue;
+}
