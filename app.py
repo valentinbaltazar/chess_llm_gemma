@@ -84,7 +84,7 @@ with gr.Blocks(css_paths="styles.css", fill_height=True) as demo:
         with gr.Column():
             chat_interface.render()
 
-    game_logs = gr.Label(label="Game Logs", elem_classes="game_logs_label")
+    game_logs = gr.Label(label="Game Logs", elem_id="game_logs_label")
     
     move_input = gr.Textbox(label="Enter your move in algebraic notation (e.g., e4, Nf3, Bxc4)")
     btn = gr.Button("Submit Move")
