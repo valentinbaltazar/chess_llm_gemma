@@ -22,9 +22,9 @@ MAX_NEW_TOKENS = 2048
 DEFAULT_MAX_NEW_TOKENS = 128
 
 # model_id = "hf://google/gemma-2b-keras"
-# model_id = "hf://google/gemma-2-2b-it"
+model_id = "hf://google/gemma-2-2b-it"
 
-model_id = 'kaggle://valentinbaltazar/gemma-chess/keras/gemma_2b_en_chess'
+# model_id = 'kaggle://valentinbaltazar/gemma-chess/keras/gemma_2b_en_chess'
 
 
 model = keras_nlp.models.GemmaCausalLM.from_preset(model_id)
@@ -72,7 +72,7 @@ chat_interface = gr.ChatInterface(
 )
 
     
-with gr.Blocks(fill_height=True) as demo:
+with gr.Blocks(css_paths="style.css",,fill_height=True) as demo:
     gr.Markdown(DESCRIPTION)
         
     play_match = Game()
@@ -81,11 +81,10 @@ with gr.Blocks(fill_height=True) as demo:
     with gr.Row():
         with gr.Column():
             board_image = gr.HTML(play_match.display_board())
-            game_logs = gr.Label(label="Game Logs")
         with gr.Column():
             chat_interface.render()
 
-    # game_logs = gr.Label(label="Game Logs")
+    game_logs = gr.Label(label="Game Logs", elem_classes="game_logs_label")
     
     move_input = gr.Textbox(label="Enter your move in algebraic notation (e.g., e4, Nf3, Bxc4)")
     btn = gr.Button("Submit Move")
