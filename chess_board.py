@@ -91,7 +91,7 @@ class Game:
             yield self.gemma_moves(), f'Gemma plays {self.sequence[-1]}! (Current Sequence: {self.sequence} {len(self.sequence)})'
         else:
             print("Try again")
-            yield self.display_board()
+            yield self.display_board(), "Try again"
 
     def get_move_logs(self):
         return self.sequence
