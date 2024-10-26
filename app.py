@@ -8,7 +8,7 @@ import spaces
 import torch
 
 from typing import Iterator
-# import time
+import time
 
 from chess_board import Game
 
@@ -84,8 +84,10 @@ chat_interface = gr.ChatInterface(
 def display_text(seq):
     # Function to display some predefined text
     # seq = play_match.get_move_logs()
+    seq = ['e4','e5']
     for move in seq:
         yield move
+        time.sleep(2)
     
 with gr.Blocks(fill_height=True) as demo:
     gr.Markdown(DESCRIPTION)
@@ -104,7 +106,7 @@ with gr.Blocks(fill_height=True) as demo:
     btn = gr.Button("Submit Move")
     btn.click(play_match.generate_moves, inputs=move_input, outputs=board_image)
     
-    btn.click(display_text, inputs=play_match.get_move_logs(), outputs=text_output)
+    btn.click(display_text, inputs=play_match.get_move_logs, outputs=text_output)
     
 
     reset_btn = gr.Button("Reset Game")
