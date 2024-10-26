@@ -81,9 +81,9 @@ chat_interface = gr.ChatInterface(
 )
 
 
-def display_text():
+def display_text(seq):
     # Function to display some predefined text
-    seq = play_match.get_move_logs()
+    # seq = play_match.get_move_logs()
     for move in seq:
         yield move
     
@@ -103,7 +103,8 @@ with gr.Blocks(fill_height=True) as demo:
     move_input = gr.Textbox(label="Enter your move in algebraic notation (e.g., e4, Nf3, Bxc4)")
     btn = gr.Button("Submit Move")
     btn.click(play_match.generate_moves, inputs=move_input, outputs=board_image)
-    btn.click(display_text, outputs=text_output)
+    
+    btn.click(display_text, inputs=play_match.get_move_logs(), outputs=text_output)
     
 
     reset_btn = gr.Button("Reset Game")
