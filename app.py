@@ -79,8 +79,9 @@ with gr.Blocks(fill_height=True) as demo:
 
     # chess_png = gr.Image(play_match.display_board())
     with gr.Row():
-        board_image = gr.HTML(play_match.display_board())
-        game_logs = gr.Label(label="Game Logs")
+        with gr.Column():
+            board_image = gr.HTML(play_match.display_board())
+            game_logs = gr.Label(label="Game Logs")
         with gr.Column():
             chat_interface.render()
 
