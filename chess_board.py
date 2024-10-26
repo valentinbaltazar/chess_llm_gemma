@@ -93,6 +93,10 @@ class Game:
             print("Try again")
             yield self.display_board()
 
+    def get_move_logs(self):
+        return self.sequence
+        
+
 def main():
     end_game = False # Change this to False
 
