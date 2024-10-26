@@ -87,8 +87,8 @@ class Game:
     def generate_moves(self, move):
         valid_move = self.player_moves(move)
         if valid_move:
-            yield self.display_board()
-            yield self.gemma_moves()
+            yield self.display_board(), f"You played: {move}"
+            yield self.gemma_moves(), f'Gemma plays {self.sequence[-1]}! (Current Sequence: {self.sequence} {len(self.sequence)})'
         else:
             print("Try again")
             yield self.display_board()
