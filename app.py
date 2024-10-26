@@ -83,7 +83,9 @@ chat_interface = gr.ChatInterface(
 
 def display_text():
     # Function to display some predefined text
-    return "This is the predefined output text testing."
+    seq = play_match.get_move_logs()
+    for move in seq:
+        yield move
     
 with gr.Blocks(fill_height=True) as demo:
     gr.Markdown(DESCRIPTION)
