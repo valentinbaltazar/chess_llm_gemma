@@ -62,15 +62,6 @@ def generate(
 
 chat_interface = gr.ChatInterface(
     fn=generate,
-    additional_inputs=[
-        gr.Slider(
-            label="Max new tokens",
-            minimum=1,
-            maximum=MAX_NEW_TOKENS,
-            step=1,
-            value=DEFAULT_MAX_NEW_TOKENS,
-        ),
-    ],
     stop_btn=None,
     examples=[
         ["Hi Gemma, what is a good first move in chess?"],
@@ -79,7 +70,6 @@ chat_interface = gr.ChatInterface(
     cache_examples=False,
     type="messages",
 )
-
 
     
 with gr.Blocks(fill_height=True) as demo:
@@ -90,10 +80,11 @@ with gr.Blocks(fill_height=True) as demo:
     # chess_png = gr.Image(play_match.display_board())
     with gr.Row():
         board_image = gr.HTML(play_match.display_board())
+        game_logs = gr.Label(label="Game Logs")
         with gr.Column():
             chat_interface.render()
 
-    game_logs = gr.Label(label="Display Text for Logs")
+    # game_logs = gr.Label(label="Game Logs")
     
     move_input = gr.Textbox(label="Enter your move in algebraic notation (e.g., e4, Nf3, Bxc4)")
     btn = gr.Button("Submit Move")
