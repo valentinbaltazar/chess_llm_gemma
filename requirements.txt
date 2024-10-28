@@ -5,4 +5,4 @@ keras>=3
 spaces
 chess
 safetensors
-pip install -q -U google-generativeai
+google-generativeai
