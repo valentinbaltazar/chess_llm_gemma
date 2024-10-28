@@ -67,7 +67,7 @@ def generate(
 
     outputs = ""
     
-    for char in response:
+    for char in response.text:
         outputs += char
         yield outputs
 
