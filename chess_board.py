@@ -15,6 +15,8 @@ class Game:
         self.board = chess.Board()
         self.sequence = []
         self.counter = 0
+        self.arrow= None
+        
         self.model_id = 'kaggle://valentinbaltazar/gemma-chess/keras/gemma_2b_en_chess'
         self.sampler = keras_nlp.samplers.TopKSampler(k=50, temperature=0.7)
         self.model = keras_nlp.models.GemmaCausalLM.from_preset(self.model_id)
@@ -61,7 +63,7 @@ class Game:
     def display_board(self):
         # clear_output(wait=True)
         # display(SVG(chess.svg.board(board=self.board)))
-        board_svg = chess.svg.board(board=self.board)
+        board_svg = chess.svg.board(board=self.board, arrows=[self.arrow])
         # return svg2png(bytestring=board_svg)
         return board_svg
 
@@ -72,6 +74,7 @@ class Game:
             self.board.push(update)
             # self.display_board()
             self.sequence.append(move)
+            self.arrow = chess.svg.Arrow(move.from_square, move.to_square, color="#0000cccc")
             return True
         except:
             print(f"Invalid move '{move}'. Use algebraic notation (e.g., 'e4', 'Nf3', 'Bxc4') or ask Gemma for help.")
