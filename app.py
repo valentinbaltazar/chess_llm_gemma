@@ -33,11 +33,24 @@ DEFAULT_MAX_NEW_TOKENS = 128
 # tokenizer = model.preprocessor.tokenizer
 
 DESCRIPTION = """
-# Gemma 2B
-**Welcome to the Gemma Chess Chatbot!**
+# Chess Tutor AI
+**Welcome to the Chess Chatbot!**
 
-This game mode allows you to play a game against Gemma, the input must be in algebraic notation. \n
-If you need help learning algebraic notation ask Gemma!
+The goal of this project is to showcase the use of AI in learning chess. This app allows you to play a game against a custom fine-tuned model (Gemma 2B). The challenge is that input must be in *algebraic notation*.
+
+## Features
+
+### For New & Beginner Players
+- The chat interface uses the Gemini API, if you need help with chess rules or learning algebraic notation, just ask!
+
+### For Advanced Users
+- Pick an opening to play, and ask Gemini for more info.
+
+
+<br>
+
+Enjoy your game!  
+**- Valentin**
 """
 
 api_key = os.getenv("GEMINI_API_KEY")
