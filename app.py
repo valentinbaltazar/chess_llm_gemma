@@ -114,6 +114,7 @@ with gr.Blocks(css_paths="styles.css", fill_height=True) as demo:
     move_input = gr.Textbox(label="Enter your move in algebraic notation (e.g., e4, Nf3, Bxc4)")
     btn = gr.Button("Submit Move")
     btn.click(play_match.generate_moves, inputs=move_input, outputs=[board_image, game_logs])
+    btn.click(lambda x: gr.update(value=''), [],[move_input])
     
     # btn.click(display_text, inputs=play_match.get_move_logs, outputs=text_output)
     
