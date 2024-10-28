@@ -12,6 +12,8 @@ import time
 
 from chess_board import Game
 
+import google.generativeai as genai
+
 
 print(f"Is CUDA available: {torch.cuda.is_available()}")
 print(f"CUDA device: {torch.cuda.get_device_name(torch.cuda.current_device())}")
@@ -22,13 +24,13 @@ MAX_NEW_TOKENS = 2048
 DEFAULT_MAX_NEW_TOKENS = 128
 
 # model_id = "hf://google/gemma-2b-keras"
-model_id = "hf://google/gemma-2-2b-it"
+# model_id = "hf://google/gemma-2-2b-it"
 
 # model_id = 'kaggle://valentinbaltazar/gemma-chess/keras/gemma_2b_en_chess'
 
 
-model = keras_nlp.models.GemmaCausalLM.from_preset(model_id)
-tokenizer = model.preprocessor.tokenizer
+# model = keras_nlp.models.GemmaCausalLM.from_preset(model_id)
+# tokenizer = model.preprocessor.tokenizer
 
 DESCRIPTION = """
 # Gemma 2B
@@ -38,6 +40,16 @@ This game mode allows you to play a game against Gemma, the input must be in alg
 If you need help learning algebraic notation ask Gemma!
 """
 
+
+user_secrets = UserSecretsClient()
+api_key = user_secrets.get_secret("GEMINI_API_KEY")
+genai.configure(api_key = api_key)
+
+model = genai.GenerativeModel(model_name='gemini-1.5-flash-latest')
+
+# Chat
+chat = model.start_chat()
+
 # @spaces.GPU
 def generate(
     message: str,
@@ -45,13 +57,15 @@ def generate(
     max_new_tokens: int = 1024,
     ) -> Iterator[str]:
 
-    input_ids = tokenizer.tokenize(message)
+    # input_ids = tokenizer.tokenize(message)
     
-    if len(input_ids) > MAX_INPUT_TOKEN_LENGTH:
-        input_ids = input_ids[-MAX_INPUT_TOKEN_LENGTH:]
-        gr.Warning(f"Trimmed input from conversation as it was longer than {MAX_INPUT_TOKEN_LENGTH} tokens.")
+    # if len(input_ids) > MAX_INPUT_TOKEN_LENGTH:
+    #     input_ids = input_ids[-MAX_INPUT_TOKEN_LENGTH:]
+    #     gr.Warning(f"Trimmed input from conversation as it was longer than {MAX_INPUT_TOKEN_LENGTH} tokens.")
 
-    response = model.generate(message, max_length=max_new_tokens)
+    # response = model.generate(message, max_length=max_new_tokens)
+
+    response = chat.send_message(message)
 
     outputs = ""
     
