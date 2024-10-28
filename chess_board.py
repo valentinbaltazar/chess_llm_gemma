@@ -77,7 +77,7 @@ class Game:
             self.board.push(update)
             # self.display_board()
             self.sequence.append(move)
-            self.arrow = chess.svg.Arrow(move.from_square, move.to_square, color="#0000cccc")
+            self.arrow = chess.svg.Arrow(update.from_square, update.to_square, color="#0000cccc")
             return True
         except:
             print(f"Invalid move '{move}'. Use algebraic notation (e.g., 'e4', 'Nf3', 'Bxc4') or ask Gemma for help.")
