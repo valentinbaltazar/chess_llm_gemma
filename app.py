@@ -40,9 +40,7 @@ This game mode allows you to play a game against Gemma, the input must be in alg
 If you need help learning algebraic notation ask Gemma!
 """
 
-
-user_secrets = UserSecretsClient()
-api_key = user_secrets.get_secret("GEMINI_API_KEY")
+api_key = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key = api_key)
 
 model = genai.GenerativeModel(model_name='gemini-1.5-flash-latest')
