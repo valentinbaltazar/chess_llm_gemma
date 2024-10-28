@@ -63,7 +63,10 @@ class Game:
     def display_board(self):
         # clear_output(wait=True)
         # display(SVG(chess.svg.board(board=self.board)))
-        board_svg = chess.svg.board(board=self.board, arrows=[self.arrow])
+        if self.arrow:
+            board_svg = chess.svg.board(board=self.board, arrows=[self.arrow])
+        else:
+            board_svg = chess.svg.board(board=self.board)
         # return svg2png(bytestring=board_svg)
         return board_svg
 
