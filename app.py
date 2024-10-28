@@ -89,8 +89,9 @@ chat_interface = gr.ChatInterface(
     fn=generate,
     stop_btn=None,
     examples=[
-        ["Hi Gemma, what is a good first move in chess?"],
-        ["How does the Knight move?"]
+        ["Hi Gemini, what is a good first move in chess?"],
+        ["How does the Knight move?"],
+        ["Explain algebraic notation for capturing a piece in chess?"]
     ],
     cache_examples=False,
     type="messages",
