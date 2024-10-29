@@ -52,8 +52,8 @@ class Game:
             return None
 
     def gemma_moves(self):
-        print(f"Gemma is thinking...(Current Sequence: {self.sequence} {len(self.sequence)})")
-        time.sleep(3)
+        # print(f"Gemma is thinking...(Current Sequence: {self.sequence} {len(self.sequence)})")
+        # time.sleep(3)
         return self.call_gemma()
 
     def player_moves(self, move):
@@ -87,6 +87,7 @@ class Game:
         self.board = chess.Board()
         self.sequence = []
         self.counter = 0
+        self.arrow = None
         # self.board.reset
         return self.display_board()
     
@@ -94,6 +95,9 @@ class Game:
         valid_move = self.player_moves(move)
         if valid_move:
             yield self.display_board(), f"You played: {move}"
+            time.sleep(2)
+            yield self.display_board(), f"Gemma is thinking...(Current Sequence: {self.sequence} {len(self.sequence)})"
+            time.sleep(3)
             yield self.gemma_moves(), f'Gemma plays {self.sequence[-1]}! (Current Sequence: {self.sequence} {len(self.sequence)})'
         else:
             print("Try again")
