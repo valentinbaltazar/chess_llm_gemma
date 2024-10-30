@@ -92,7 +92,7 @@ chat_interface = gr.ChatInterface(
 )
 
     
-with gr.Blocks(css_path="styles.css", fill_height=True) as demo:
+with gr.Blocks(css_paths="styles.css", fill_height=True) as demo:
     gr.Markdown(DESCRIPTION)
         
     play_match = Game()
