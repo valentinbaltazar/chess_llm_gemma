@@ -2,21 +2,21 @@ import os
 os.environ["KERAS_BACKEND"] = "torch"  # "jax", "torch" or "tensorflow"
 
 import gradio as gr
-# import keras_nlp
-# import keras
-# import spaces
-# import torch
+import keras_nlp
+import keras
+import spaces
+import torch
 
 from typing import Iterator
 import time
 
 from chess_board import Game
 from datasets import load_dataset
-# import google.generativeai as genai
+import google.generativeai as genai
 
 
-# print(f"Is CUDA available: {torch.cuda.is_available()}")
-# print(f"CUDA device: {torch.cuda.get_device_name(torch.cuda.current_device())}")
+print(f"Is CUDA available: {torch.cuda.is_available()}")
+print(f"CUDA device: {torch.cuda.get_device_name(torch.cuda.current_device())}")
 
 
 DESCRIPTION = """
@@ -38,13 +38,18 @@ Enjoy your game!
 **- Valentin**
 """
 
-# api_key = os.getenv("GEMINI_API_KEY")
-# genai.configure(api_key = api_key)
+api_key = os.getenv("GEMINI_API_KEY")
+genai.configure(api_key = api_key)
 
-# model = genai.GenerativeModel(model_name='gemini-1.5-flash-latest')
+model = genai.GenerativeModel(model_name='gemini-1.5-flash-latest')
 
-# Chat
-# chat = model.start_chat()
+chat = model.start_chat()
+
+ds = load_dataset("Lichess/chess-openings", split="train")
+df = ds.to_pandas()
+
+opening_names = df['name'].unique().tolist()
+
 
 # @spaces.GPU
 def generate(
@@ -53,7 +58,7 @@ def generate(
     max_new_tokens: int = 1024,
     ) -> Iterator[str]:
 
-    response = "hi there" #chat.send_message(message)
+    response = chat.send_message(message)
 
     outputs = ""
     
@@ -62,11 +67,6 @@ def generate(
         yield outputs
 
 
-# Load the dataset and convert to pandas DataFrame
-ds = load_dataset("Lichess/chess-openings", split="train")
-df = ds.to_pandas()
-
-# Function to retrieve moves and name for a selected opening
 def get_opening_details(opening_name):
     opening_data = df[df['name'] == opening_name].iloc[0]
     moves = opening_data['pgn']
@@ -77,11 +77,7 @@ def get_move_list(opening_name):
     moves = opening_data['pgn']
     pgn_string = moves.split()
     return [move for idx,move in enumerate(pgn_string[1:],1) if idx%3!=0]
-    # return ['e4', 'e5', 'Nf3']
-
-# Create a list of unique opening names
-opening_names = df['name'].unique().tolist()
-
+   
 
 chat_interface = gr.ChatInterface(
     fn=generate,
@@ -96,14 +92,11 @@ chat_interface = gr.ChatInterface(
 )
 
     
-with gr.Blocks(css=""".big-text {
-        font-size: 2px !important;
-    }""", fill_height=True) as demo:
+with gr.Blocks(css_path="styles.css", fill_height=True) as demo:
     gr.Markdown(DESCRIPTION)
         
     play_match = Game()
 
-    # chess_png = gr.Image(play_match.display_board())
     with gr.Row():
         with gr.Column():
             board_image = gr.HTML(play_match.display_board())
