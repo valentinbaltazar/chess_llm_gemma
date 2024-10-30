@@ -16,6 +16,8 @@ class Game:
         self.sequence = []
         self.counter = 0
         self.arrow= None
+        self.opening_name = None
+        self.opening_moves = None
         
         self.model_id = 'kaggle://valentinbaltazar/gemma-chess/keras/gemma_2b_en_chess'
         self.sampler = keras_nlp.samplers.TopKSampler(k=50, temperature=0.7)
@@ -108,7 +110,6 @@ class Game:
         return self.sequence
     
     def load_opening(self, opening_name, opening_moves):
-        self.opening = True
         self.opening_name = opening_name
         self.opening_moves = opening_moves
         return f"Ok, lets play the {opening_name}! {opening_moves} Make your first move."
