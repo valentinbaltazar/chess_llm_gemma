@@ -1,9 +1,9 @@
 # import os
 # os.environ["KERAS_BACKEND"] = "torch"  # "jax", "torch" or "tensorflow"
 
-import keras_nlp
-import keras
-import torch
+# import keras_nlp
+# import keras
+# import torch
 
 import chess
 import chess.svg
@@ -17,27 +17,29 @@ class Game:
         self.counter = 0
         self.arrow= None
         
-        self.model_id = 'kaggle://valentinbaltazar/gemma-chess/keras/gemma_2b_en_chess'
-        self.sampler = keras_nlp.samplers.TopKSampler(k=50, temperature=0.7)
-        self.model = keras_nlp.models.GemmaCausalLM.from_preset(self.model_id)
-        self.compile_model()
+        # self.model_id = 'kaggle://valentinbaltazar/gemma-chess/keras/gemma_2b_en_chess'
+        # self.sampler = keras_nlp.samplers.TopKSampler(k=50, temperature=0.7)
+        # self.model = keras_nlp.models.GemmaCausalLM.from_preset(self.model_id)
+        # self.compile_model()
 
     def compile_model(self):
         self.model.compile(sampler=self.sampler)
     
-    def call_gemma(self):
+    def call_gemma(self, opening_move):
         template = "Instruction:\n{instruction}\n\nResponse:\n{response}"
         
+        if opening_move:
+            gemma_move = opening_move
+        else:
+            template = "Instruction:\n{instruction}\n\nResponse:\n{response}"
 
-        prompt = template.format(
-            instruction=f"Predict the next chess move in the sequence {str(self.sequence)}",
-            response="",)
+            prompt = template.format(
+                instruction=f"Predict the next chess move in the sequence {str(self.sequence)}",
+                response="",)
 
-        output = self.model.generate(prompt, max_length=256)
-       
-        gemma_move = output.split(' ')[-1].strip("'")
-
-        # gemma_move = 'e5'
+            # output = self.model.generate(prompt, max_length=256)
+        
+            # gemma_move = output.split(' ')[-1].strip("'")
 
         if self.make_move(gemma_move):
             print(f'Gemma plays {self.sequence[-1]}! (Current Sequence: {self.sequence} {len(self.sequence)})')
@@ -54,7 +56,10 @@ class Game:
     def gemma_moves(self):
         # print(f"Gemma is thinking...(Current Sequence: {self.sequence} {len(self.sequence)})")
         # time.sleep(3)
-        return self.call_gemma()
+        if self.opening_moves and len(self.sequence)<len(self.opening_moves):
+            return self.call_gemma(self.opening_moves[len(self.sequence)])
+        else:
+            return self.call_gemma(None)
 
     def player_moves(self, move):
         return self.make_move(move)
@@ -105,6 +110,12 @@ class Game:
 
     def get_move_logs(self):
         return self.sequence
+    
+    def load_opening(self, opening_name, opening_moves):
+        self.opening = True
+        self.opening_name = opening_name
+        self.opening_moves = opening_moves
+        return f"Ok, lets play the {opening_name}! {opening_moves} Make your first move."
         
 
 def main():

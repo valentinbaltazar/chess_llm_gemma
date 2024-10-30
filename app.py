@@ -2,41 +2,29 @@ import os
 os.environ["KERAS_BACKEND"] = "torch"  # "jax", "torch" or "tensorflow"
 
 import gradio as gr
-import keras_nlp
-import keras
-import spaces
-import torch
+# import keras_nlp
+# import keras
+# import spaces
+# import torch
 
 from typing import Iterator
 import time
 
 from chess_board import Game
-
-import google.generativeai as genai
-
-
-print(f"Is CUDA available: {torch.cuda.is_available()}")
-print(f"CUDA device: {torch.cuda.get_device_name(torch.cuda.current_device())}")
-
-MAX_INPUT_TOKEN_LENGTH = 4096
-
-MAX_NEW_TOKENS = 2048
-DEFAULT_MAX_NEW_TOKENS = 128
-
-# model_id = "hf://google/gemma-2b-keras"
-# model_id = "hf://google/gemma-2-2b-it"
-
-# model_id = 'kaggle://valentinbaltazar/gemma-chess/keras/gemma_2b_en_chess'
+from datasets import load_dataset
+# import google.generativeai as genai
 
 
-# model = keras_nlp.models.GemmaCausalLM.from_preset(model_id)
-# tokenizer = model.preprocessor.tokenizer
+# print(f"Is CUDA available: {torch.cuda.is_available()}")
+# print(f"CUDA device: {torch.cuda.get_device_name(torch.cuda.current_device())}")
+
 
 DESCRIPTION = """
 # Chess Tutor AI
 **Welcome to the Chess Chatbot!**
 
-The goal of this project is to showcase the use of AI in learning chess. This app allows you to play a game against a custom fine-tuned model (Gemma 2B). The challenge is that input must be in *algebraic notation*.
+The goal of this project is to showcase the use of AI in learning chess. This app allows you to play a game against a custom fine-tuned model (Gemma 2B).\n
+The challenge is that input must be in *algebraic notation*.
 
 ## Features
 
@@ -46,20 +34,17 @@ The goal of this project is to showcase the use of AI in learning chess. This ap
 ### For Advanced Users
 - Pick an opening to play, and ask Gemini for more info.
 
-
-<br>
-
 Enjoy your game!  
 **- Valentin**
 """
 
-api_key = os.getenv("GEMINI_API_KEY")
-genai.configure(api_key = api_key)
+# api_key = os.getenv("GEMINI_API_KEY")
+# genai.configure(api_key = api_key)
 
-model = genai.GenerativeModel(model_name='gemini-1.5-flash-latest')
+# model = genai.GenerativeModel(model_name='gemini-1.5-flash-latest')
 
 # Chat
-chat = model.start_chat()
+# chat = model.start_chat()
 
 # @spaces.GPU
 def generate(
@@ -68,21 +53,34 @@ def generate(
     max_new_tokens: int = 1024,
     ) -> Iterator[str]:
 
-    # input_ids = tokenizer.tokenize(message)
-    
-    # if len(input_ids) > MAX_INPUT_TOKEN_LENGTH:
-    #     input_ids = input_ids[-MAX_INPUT_TOKEN_LENGTH:]
-    #     gr.Warning(f"Trimmed input from conversation as it was longer than {MAX_INPUT_TOKEN_LENGTH} tokens.")
-
-    # response = model.generate(message, max_length=max_new_tokens)
-
-    response = chat.send_message(message)
+    response = "hi there" #chat.send_message(message)
 
     outputs = ""
     
-    for char in response.text:
+    for char in response:
         outputs += char
         yield outputs
+
+
+# Load the dataset and convert to pandas DataFrame
+ds = load_dataset("Lichess/chess-openings", split="train")
+df = ds.to_pandas()
+
+# Function to retrieve moves and name for a selected opening
+def get_opening_details(opening_name):
+    opening_data = df[df['name'] == opening_name].iloc[0]
+    moves = opening_data['pgn']
+    return f"Opening: {opening_data['name']}\nMoves: {moves}"
+
+def get_move_list(opening_name):
+    opening_data = df[df['name'] == opening_name].iloc[0]
+    moves = opening_data['pgn']
+    pgn_string = moves.split()
+    return [move for idx,move in enumerate(pgn_string[1:],1) if idx%3!=0]
+    # return ['e4', 'e5', 'Nf3']
+
+# Create a list of unique opening names
+opening_names = df['name'].unique().tolist()
 
 
 chat_interface = gr.ChatInterface(
@@ -98,7 +96,9 @@ chat_interface = gr.ChatInterface(
 )
 
     
-with gr.Blocks(css_paths="styles.css", fill_height=True) as demo:
+with gr.Blocks(css=""".big-text {
+        font-size: 2px !important;
+    }""", fill_height=True) as demo:
     gr.Markdown(DESCRIPTION)
         
     play_match = Game()
@@ -110,19 +110,35 @@ with gr.Blocks(css_paths="styles.css", fill_height=True) as demo:
         with gr.Column():
             chat_interface.render()
 
-    game_logs = gr.Label(label="Game Logs", elem_id="game_logs_label")
+    game_logs = gr.Label(label="Game Logs", elem_classes=["big-text"])
     
-    move_input = gr.Textbox(label="Enter your move in algebraic notation (e.g., e4, Nf3, Bxc4)")
-    btn = gr.Button("Submit Move")
-    btn.click(play_match.generate_moves, inputs=move_input, outputs=[board_image, game_logs])
-    btn.click(lambda x: gr.update(value=''), [],[move_input])
+    with gr.Row():
+        with gr.Column():
+            gr.Markdown("### Play a Match vs Gemma")
+
+            move_input = gr.Textbox(label="Enter your move in algebraic notation: (e.g., e4, Nf3, Bxc4)")
+            submit_move = gr.Button("Submit Move")
+            submit_move.click(play_match.generate_moves, inputs=move_input, outputs=[board_image, game_logs])
+            submit_move.click(lambda x: gr.update(value=''), [],[move_input])
+
+            reset_board = gr.Button("Reset Game")
+            reset_board.click(play_match.reset_board, outputs=board_image)
+            reset_board.click(lambda x: gr.update(value=''), [],[game_logs])
+
+        with gr.Column():
+            gr.Markdown("### Chess Openings Explorer")
+
+            opening_choice = gr.Dropdown(label="Choose a Chess Opening", choices=opening_names)
+            opening_output = gr.Textbox(label="Opening Details", lines=4)
+            opening_moves = gr.State()
+
+            opening_choice.change(fn=get_opening_details, inputs=opening_choice, outputs=opening_output)
+            opening_choice.change(fn=get_move_list, inputs=opening_choice, outputs=opening_moves)
+
+
+            load_opening = gr.Button("Load Opening")
+            load_opening.click(play_match.reset_board, outputs=board_image)
+            load_opening.click(play_match.load_opening, inputs=[opening_choice, opening_moves], outputs=game_logs)
     
-    # btn.click(display_text, inputs=play_match.get_move_logs, outputs=text_output)
-    
-
-    reset_btn = gr.Button("Reset Game")
-    reset_btn.click(play_match.reset_board, outputs=board_image)
-
-
 if __name__ == "__main__":
     demo.queue(max_size=20).launch()
