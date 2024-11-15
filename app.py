@@ -97,7 +97,7 @@ with gr.Blocks(css_paths="styles.css", fill_height=True) as demo:
         
     play_match = Game()
 
-    with gr.Row(equal_height=True):
+    with gr.Row():
         with gr.Column():
             board_image = gr.HTML(play_match.display_board())
         with gr.Column():
