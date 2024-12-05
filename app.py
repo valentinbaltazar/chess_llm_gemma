@@ -51,7 +51,7 @@ df = ds.to_pandas()
 opening_names = df['name'].unique().tolist()
 
 
-# @spaces.GPU
+@spaces.GPU
 def generate(
     message: str,
     chat_history: list[dict],
