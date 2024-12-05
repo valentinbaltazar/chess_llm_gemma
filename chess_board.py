@@ -1,3 +1,4 @@
+import spaces
 import os
 os.environ["KERAS_BACKEND"] = "torch"  # "jax", "torch" or "tensorflow"
 
