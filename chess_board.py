@@ -26,7 +26,13 @@ class Game:
 
     def compile_model(self):
         self.model.compile(sampler=self.sampler)
-    
+
+    @spaces.GPU
+    def inference_gemma(self, prompt, max_length=256):
+        """Inference requires GPU"""
+        response = self.model.generate(prompt, max_length)
+        return response
+        
     def call_gemma(self, opening_move):
         template = "Instruction:\n{instruction}\n\nResponse:\n{response}"
         
@@ -39,7 +45,7 @@ class Game:
                 instruction=f"Predict the next chess move in the sequence {str(self.sequence)}",
                 response="",)
 
-            output = self.model.generate(prompt, max_length=256)
+            output = self.inference_gemma(prompt, max_length=256) #self.model.generate(prompt, max_length=256)
         
             gemma_move = output.split(' ')[-1].strip("'")
 
