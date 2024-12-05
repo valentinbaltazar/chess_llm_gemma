@@ -1,10 +1,12 @@
+import spaces
+
 import os
 os.environ["KERAS_BACKEND"] = "torch"  # "jax", "torch" or "tensorflow"
 
 import gradio as gr
 import keras_nlp
 import keras
-import spaces
+# import spaces
 import torch
 
 from typing import Iterator
