@@ -1,4 +1,4 @@
-import spaces
+# import spaces
 import os
 os.environ["KERAS_BACKEND"] = "torch"  # "jax", "torch" or "tensorflow"
 
@@ -28,7 +28,7 @@ class Game:
     def compile_model(self):
         self.model.compile(sampler=self.sampler)
 
-    @spaces.GPU
+    # @spaces.GPU
     def inference_gemma(self, prompt, max_length=256):
         """Inference requires GPU"""
         response = self.model.generate(prompt, max_length)
